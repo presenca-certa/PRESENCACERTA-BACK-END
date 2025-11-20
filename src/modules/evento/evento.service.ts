@@ -21,6 +21,28 @@ export default class EventoService {
         return evento;
     }
 
+    async createLote(eventosDto: CreateEventoDto[]) {
+        const eventosCriados = [];
+
+        for (const eventoDto of eventosDto) {
+            const evento = await this.eventoRepository.create(eventoDto);
+
+            if (eventoDto.turmas && eventoDto.turmas.length > 0) {
+                for (const turmaId of eventoDto.turmas) {
+                    await this.eventoRepository.vinculaTurma(
+                        evento.id,
+                        turmaId,
+                    );
+                }
+            }
+            eventosCriados.push(evento);
+        }
+        return {
+            totalCriados: eventosCriados.length,
+            eventos: eventosCriados,
+        };
+    }
+
     findAll() {
         return this.eventoRepository.findAll();
     }

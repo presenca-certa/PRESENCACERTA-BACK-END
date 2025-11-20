@@ -26,6 +26,20 @@ export default class EventoRepository {
         return createdEvento;
     }
 
+    async createMany(eventos: CreateEventoDto[]) {
+        return this.prisma.evento.createMany({
+            data: eventos.map((e) => ({
+                nome: e.nome,
+                dataInicio: e.dataInicio,
+                dataFim: e.dataFim,
+                horaInicio: e.horaInicio,
+                horaFim: e.horaFim,
+                localId: e.localId,
+                tipoId: e.tipoId,
+            })),
+        });
+    }
+
     async findAll() {
         const eventos: Partial<IEvento>[] = await this.prisma.evento.findMany({
             select: {
