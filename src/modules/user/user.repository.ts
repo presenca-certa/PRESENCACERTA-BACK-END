@@ -1,83 +1,106 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-import { CreateUserDTO } from './dto/create-user.dto';
-import DatabaseService from 'src/database/database.service';
-import { IUser } from 'src/shared/interfaces/user.interface';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { NotFoundException, ConflictException } from '@nestjs/common';
+import { Prisma, PrismaClient } from "@prisma/client";
+import { CreateUserDTO } from "./dto/create-user.dto";
+import DatabaseService from "src/database/database.service";
+import { IUser } from "src/shared/interfaces/user.interface";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { NotFoundException, ConflictException } from "@nestjs/common";
 
 export default class UserRepository {
-  async create(user: CreateUserDTO) {
-    const prisma: PrismaClient = DatabaseService.getInstance();
+    async create(user: CreateUserDTO) {
+        const prisma: PrismaClient = DatabaseService.getInstance();
 
-    try {
-      const createdUser = await prisma.usuario.create({
-        data: {
-          email: user.email,
-          senha: user.password,
-        },
-      });
+        try {
+            const createdUser = await prisma.usuario.create({
+                data: {
+                    email: user.email,
+                    senha: user.password,
+                    nome: user.nome,
+                    role: user.role || "user",
+                },
+            });
 
-      return createdUser;
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException('email already exists');
-      }
+            return createdUser;
+        } catch (error) {
+            if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === "P2002"
+            ) {
+                throw new ConflictException("Este email já está cadastrado");
+            }
 
-      throw error;
-    }
-  }
-
-  async findAll() {
-    const prisma: PrismaClient = DatabaseService.getInstance();
-    const users: Omit<IUser, 'password'>[] = await prisma.usuario.findMany({
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-
-    return users;
-  }
-
-  async findOneById(id: number) {
-    const prisma: PrismaClient = DatabaseService.getInstance();
-    const user: Omit<IUser, 'password'> = await prisma.usuario.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User does not exist');
+            throw error;
+        }
     }
 
-    return user;
-  }
+    async findAll() {
+        const prisma: PrismaClient = DatabaseService.getInstance();
+        const users = await prisma.usuario.findMany({
+            select: {
+                id: true,
+                email: true,
+                nome: true,
+                role: true,
+                ativo: true,
+                criadoEm: true,
+            },
+        });
 
-  async update(id: number, user: UpdateUserDto) {
-    const prisma: PrismaClient = DatabaseService.getInstance();
-    const updatedUser = await prisma.usuario.update({
-      where: { id },
-      data: {
-        email: user.email,
-        senha: user.password,
-      },
-    });
+        return users;
+    }
 
-    return updatedUser;
-  }
+    async findOneById(id: number) {
+        const prisma: PrismaClient = DatabaseService.getInstance();
+        const user = await prisma.usuario.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                email: true,
+                nome: true,
+                role: true,
+                ativo: true,
+                criadoEm: true,
+            },
+        });
 
-  async remove(id: number) {
-    const prisma: PrismaClient = DatabaseService.getInstance();
-    const deletedUser = await prisma.usuario.delete({
-      where: { id },
-    });
+        if (!user) {
+            throw new NotFoundException("Usuário não encontrado");
+        }
 
-    return deletedUser;
-  }
+        return user;
+    }
+
+    async findByEmail(email: string) {
+        const prisma: PrismaClient = DatabaseService.getInstance();
+        const user = await prisma.usuario.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            throw new NotFoundException("Usuário não encontrado");
+        }
+
+        return user;
+    }
+
+    async update(id: number, user: UpdateUserDto) {
+        const prisma: PrismaClient = DatabaseService.getInstance();
+        const updatedUser = await prisma.usuario.update({
+            where: { id },
+            data: {
+                email: user.email,
+                senha: user.password,
+            },
+        });
+
+        return updatedUser;
+    }
+
+    async remove(id: number) {
+        const prisma: PrismaClient = DatabaseService.getInstance();
+        const deletedUser = await prisma.usuario.delete({
+            where: { id },
+        });
+
+        return deletedUser;
+    }
 }

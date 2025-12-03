@@ -19,6 +19,9 @@ export default class PresencaRepository {
                 pessoaId: presenca.pessoaId,
                 dataPresenca: presenca.dataPresenca,
                 horaPresenca: presenca.horaPresenca,
+                latitude: presenca.latitude,
+                longitude: presenca.longitude,
+                localizacaoId: presenca.localizacaoId,
             },
         });
 
@@ -30,8 +33,11 @@ export default class PresencaRepository {
             await this.prisma.presenca.findMany({
                 select: {
                     id: true,
+                    eventoId: true,
                     dataPresenca: true,
                     horaPresenca: true,
+                    latitude: true,
+                    longitude: true,
                     evento: {
                         select: {
                             nome: true,
@@ -54,8 +60,12 @@ export default class PresencaRepository {
             await this.prisma.presenca.findUnique({
                 where: { id },
                 select: {
+                    id: true,
+                    eventoId: true,
                     dataPresenca: true,
                     horaPresenca: true,
+                    latitude: true,
+                    longitude: true,
                     evento: {
                         select: {
                             nome: true,
@@ -63,6 +73,7 @@ export default class PresencaRepository {
                     },
                     pessoa: {
                         select: {
+                            id: true,
                             nome: true,
                             codigo: true,
                         },
@@ -71,7 +82,7 @@ export default class PresencaRepository {
             });
 
         if (!presenca) {
-            throw new NotFoundException("presenca nao existe");
+            throw new NotFoundException("Presença não encontrada");
         }
 
         return presenca;
@@ -87,6 +98,9 @@ export default class PresencaRepository {
                         pessoaId: presenca.pessoaId,
                         dataPresenca: presenca.dataPresenca,
                         horaPresenca: presenca.horaPresenca,
+                        latitude: presenca.latitude,
+                        longitude: presenca.longitude,
+                        localizacaoId: presenca.localizacaoId,
                     },
                 });
 
@@ -96,7 +110,7 @@ export default class PresencaRepository {
                 error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === "P2025"
             ) {
-                throw new NotFoundException("presenca nao existe");
+                throw new NotFoundException("Presença não encontrada");
             }
         }
     }
@@ -113,7 +127,7 @@ export default class PresencaRepository {
                 error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === "P2025"
             ) {
-                throw new NotFoundException("presenca nao existe");
+                throw new NotFoundException("Presença não encontrada");
             }
         }
     }
@@ -151,8 +165,11 @@ export default class PresencaRepository {
             },
             select: {
                 id: true,
+                eventoId: true,
                 dataPresenca: true,
                 horaPresenca: true,
+                latitude: true,
+                longitude: true,
                 pessoa: {
                     select: {
                         id: true,
@@ -160,6 +177,34 @@ export default class PresencaRepository {
                         codigo: true,
                     },
                 },
+            },
+        });
+
+        return presencas;
+    }
+
+    async findPresencasByEvento(eventoId: number) {
+        const presencas = await this.prisma.presenca.findMany({
+            where: {
+                eventoId: eventoId,
+            },
+            select: {
+                id: true,
+                eventoId: true,
+                dataPresenca: true,
+                horaPresenca: true,
+                latitude: true,
+                longitude: true,
+                pessoa: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        codigo: true,
+                    },
+                },
+            },
+            orderBy: {
+                dataPresenca: "desc",
             },
         });
 

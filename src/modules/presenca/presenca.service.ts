@@ -3,7 +3,6 @@ import PresencaRepository from "./presenca.repository";
 import CreatePresencaDto from "./dto/create-presenca.dto";
 import UpdatePresencaDto from "./dto/update-presenca.dto";
 import PeopleRepository from "../people/people.repository";
-import { log } from "console";
 
 @Injectable()
 export default class PresencaService {
@@ -40,6 +39,10 @@ export default class PresencaService {
 
     findOne(id: number) {
         return this.presencaRepository.findOneById(id);
+    }
+
+    findByEvento(eventoId: number) {
+        return this.presencaRepository.findPresencasByEvento(eventoId);
     }
 
     update(id: number, updatePresencaDto: UpdatePresencaDto) {

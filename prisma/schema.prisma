@@ -46,10 +46,14 @@ model PessoaTipo {
 }
 
 model Usuario {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique()
-  senha   String?
-  pessoas Pessoa[]
+  id        Int      @id @default(autoincrement())
+  email     String   @unique()
+  senha     String?
+  nome      String?
+  role      String   @default("user")
+  ativo     Boolean  @default(true)
+  criadoEm  DateTime @default(now())
+  pessoas   Pessoa[]
 }
 
 model Turma {
@@ -119,18 +123,25 @@ model EventoTurma {
 }
 
 model Localizacao {
-  id       Int      @id @default(autoincrement())
-  latitude Int?
-  altitude Int?
-  eventos  Evento[]
+  id           Int      @id @default(autoincrement())
+  latitude     Float
+  longitude    Float
+  raio         Float    @default(50)
+  descricao    String?
+  eventos      Evento[]
+  presencas    Presenca[]
 }
 
 model Presenca {
-  id           Int       @id @default(autoincrement())
-  eventoId     Int?
-  pessoaId     Int?
-  dataPresenca DateTime?
-  horaPresenca DateTime?
-  evento       Evento?   @relation(fields: [eventoId], references: [id])
-  pessoa       Pessoa?   @relation(fields: [pessoaId], references: [id])
+  id            Int        @id @default(autoincrement())
+  eventoId      Int?
+  pessoaId      Int?
+  dataPresenca  DateTime?
+  horaPresenca  DateTime?
+  latitude      Float?
+  longitude     Float?
+  localizacaoId Int?
+  evento        Evento?    @relation(fields: [eventoId], references: [id])
+  pessoa        Pessoa?    @relation(fields: [pessoaId], references: [id])
+  localizacao   Localizacao? @relation(fields: [localizacaoId], references: [id])
 }

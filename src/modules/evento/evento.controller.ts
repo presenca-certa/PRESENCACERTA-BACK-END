@@ -10,6 +10,7 @@ import {
 import EventoService from "./evento.service";
 import CreateEventoDto from "./dto/create-evento.dto";
 import UpdateEventoDto from "./dto/update-evento.dto";
+import { CreateBatchEventoDto } from "./dto/create-batch-evento.dto";
 
 @Controller("evento")
 export default class EventoController {
@@ -18,6 +19,11 @@ export default class EventoController {
     @Post()
     create(@Body() createEventoDto: CreateEventoDto) {
         return this.eventoService.create(createEventoDto);
+    }
+
+    @Post("batch")
+    createBatch(@Body() createBatchEventoDto: CreateBatchEventoDto) {
+        return this.eventoService.createBatch(createBatchEventoDto);
     }
 
     @Get()

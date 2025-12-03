@@ -1,21 +1,43 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import {
+    IsNotEmpty,
+    IsString,
+    IsOptional,
+    IsNumber,
+    IsDate,
+} from "class-validator";
+import { Type } from "class-transformer";
 import { IPresenca } from "src/shared/interfaces/presenca.interface";
 
 export default class CreatePresencaDto implements IPresenca {
-    @IsNotEmpty({ message: "campo matricula é obrigatório" })
-    @IsString({ message: "campo matricula deve ser uma string" })
+    @IsNotEmpty({ message: "matrícula é obrigatória" })
+    @IsString({ message: "matrícula deve ser uma string" })
     matricula: string;
 
-    @IsNotEmpty({ message: "o tipo do evento é obrigatório" })
+    @IsNotEmpty({ message: "eventoId é obrigatório" })
     eventoId: number;
 
-    // @IsDate({ message: "o campo data presenca deve ser do tipo Date" })
-    // @IsNotEmpty({ message: "a data presenca do evento é obrigatória" })
+    @IsNotEmpty({ message: "dataPresenca é obrigatória" })
+    @IsDate({ message: "dataPresenca deve ser do tipo Date" })
+    @Type(() => Date)
     dataPresenca: Date;
 
-    // @IsDate({ message: "o campo hora presenca deve ser do tipo Date" })
-    // @IsNotEmpty({ message: "a hora presenca do evento é obrigatória" })
+    @IsNotEmpty({ message: "horaPresenca é obrigatória" })
+    @IsDate({ message: "horaPresenca deve ser do tipo Date" })
+    @Type(() => Date)
     horaPresenca: Date;
 
+    @IsOptional()
     pessoaId?: number;
+
+    @IsOptional()
+    @IsNumber({}, { message: "latitude deve ser um número" })
+    latitude?: number;
+
+    @IsOptional()
+    @IsNumber({}, { message: "longitude deve ser um número" })
+    longitude?: number;
+
+    @IsOptional()
+    @IsNumber({}, { message: "localizacaoId deve ser um número" })
+    localizacaoId?: number;
 }

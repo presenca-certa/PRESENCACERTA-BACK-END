@@ -1,19 +1,13 @@
-import { IsOptional, IsInt, IsString, IsArray } from "class-validator";
+import { IsOptional, IsInt, IsString, IsNotEmpty } from "class-validator";
 
 import { IClass } from "src/shared/interfaces/class.interface";
 
 export class CreateClassDto implements IClass {
-    @IsOptional()
-    @IsString()
-    nome?: string;
+    @IsNotEmpty({ message: "nome é obrigatório" })
+    @IsString({ message: "nome deve ser uma string" })
+    nome: string;
 
-    @IsOptional()
-    @IsInt()
-    unidadeId?: number;
-
-    /*
-  @IsOptional()
-  @ValidateNested()
-  unidade?: IUnit;
-  */
+    @IsNotEmpty({ message: "unidadeId é obrigatório" })
+    @IsInt({ message: "unidadeId deve ser um número inteiro" })
+    unidadeId: number;
 }

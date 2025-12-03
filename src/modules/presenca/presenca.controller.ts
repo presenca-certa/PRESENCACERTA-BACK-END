@@ -6,6 +6,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
 } from "@nestjs/common";
 import PresencaService from "./presenca.service";
 import CreatePresencaDto from "./dto/create-presenca.dto";
@@ -21,7 +22,10 @@ export default class PresencaController {
     }
 
     @Get()
-    findAll() {
+    findAll(@Query("eventoId") eventoId?: string) {
+        if (eventoId) {
+            return this.presencaService.findByEvento(Number(eventoId));
+        }
         return this.presencaService.findAll();
     }
 
