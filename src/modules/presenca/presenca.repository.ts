@@ -33,6 +33,7 @@ export default class PresencaRepository {
             await this.prisma.presenca.findMany({
                 select: {
                     id: true,
+                    eventoId: true,
                     dataPresenca: true,
                     horaPresenca: true,
                     latitude: true,
@@ -59,6 +60,8 @@ export default class PresencaRepository {
             await this.prisma.presenca.findUnique({
                 where: { id },
                 select: {
+                    id: true,
+                    eventoId: true,
                     dataPresenca: true,
                     horaPresenca: true,
                     latitude: true,
@@ -70,6 +73,7 @@ export default class PresencaRepository {
                     },
                     pessoa: {
                         select: {
+                            id: true,
                             nome: true,
                             codigo: true,
                         },
@@ -161,6 +165,7 @@ export default class PresencaRepository {
             },
             select: {
                 id: true,
+                eventoId: true,
                 dataPresenca: true,
                 horaPresenca: true,
                 latitude: true,
@@ -172,6 +177,34 @@ export default class PresencaRepository {
                         codigo: true,
                     },
                 },
+            },
+        });
+
+        return presencas;
+    }
+
+    async findPresencasByEvento(eventoId: number) {
+        const presencas = await this.prisma.presenca.findMany({
+            where: {
+                eventoId: eventoId,
+            },
+            select: {
+                id: true,
+                eventoId: true,
+                dataPresenca: true,
+                horaPresenca: true,
+                latitude: true,
+                longitude: true,
+                pessoa: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        codigo: true,
+                    },
+                },
+            },
+            orderBy: {
+                dataPresenca: "desc",
             },
         });
 
