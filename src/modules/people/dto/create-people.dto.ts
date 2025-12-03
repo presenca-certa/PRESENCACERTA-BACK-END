@@ -9,44 +9,26 @@ import {
 import { IPeople } from "src/shared/interfaces/people.interface";
 
 export class CreatePeopleDto implements IPeople {
-    @IsString()
+    @IsString({ message: "código deve ser uma string" })
     codigo: string;
 
-    @IsString()
+    @IsString({ message: "nome deve ser uma string" })
     nome: string;
 
-    @IsString()
+    @IsString({ message: "CPF deve ser uma string" })
     @IsOptional()
-    @IsNumberString()
+    @IsNumberString({}, { message: "CPF deve conter apenas números" })
     cpf?: string;
 
     @IsOptional()
-    @IsInt()
+    @IsInt({ message: "tipoId deve ser um número inteiro" })
     tipoId?: number;
 
-    /*
-  @IsOptional()
-  @ValidateNested()
-  tipo?: IPeopleType;
-  */
-
     @IsOptional()
-    @IsInt()
+    @IsInt({ message: "unidadeId deve ser um número inteiro" })
     unidadeId?: number;
 
-    /*
-  @IsOptional()
-  @ValidateNested()
-  unidade?: IUnit;
-  */
-
     @IsOptional()
-    @IsInt()
+    @IsInt({ message: "usuarioId deve ser um número inteiro" })
     usuarioId?: number;
-
-    /*
-  @IsOptional()
-  @ValidateNested()
-  usuario?: IUser;
-  */
 }

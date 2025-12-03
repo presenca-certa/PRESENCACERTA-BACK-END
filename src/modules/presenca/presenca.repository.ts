@@ -19,6 +19,9 @@ export default class PresencaRepository {
                 pessoaId: presenca.pessoaId,
                 dataPresenca: presenca.dataPresenca,
                 horaPresenca: presenca.horaPresenca,
+                latitude: presenca.latitude,
+                longitude: presenca.longitude,
+                localizacaoId: presenca.localizacaoId,
             },
         });
 
@@ -32,6 +35,8 @@ export default class PresencaRepository {
                     id: true,
                     dataPresenca: true,
                     horaPresenca: true,
+                    latitude: true,
+                    longitude: true,
                     evento: {
                         select: {
                             nome: true,
@@ -56,6 +61,8 @@ export default class PresencaRepository {
                 select: {
                     dataPresenca: true,
                     horaPresenca: true,
+                    latitude: true,
+                    longitude: true,
                     evento: {
                         select: {
                             nome: true,
@@ -71,7 +78,7 @@ export default class PresencaRepository {
             });
 
         if (!presenca) {
-            throw new NotFoundException("presenca nao existe");
+            throw new NotFoundException("Presença não encontrada");
         }
 
         return presenca;
@@ -87,6 +94,9 @@ export default class PresencaRepository {
                         pessoaId: presenca.pessoaId,
                         dataPresenca: presenca.dataPresenca,
                         horaPresenca: presenca.horaPresenca,
+                        latitude: presenca.latitude,
+                        longitude: presenca.longitude,
+                        localizacaoId: presenca.localizacaoId,
                     },
                 });
 
@@ -96,7 +106,7 @@ export default class PresencaRepository {
                 error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === "P2025"
             ) {
-                throw new NotFoundException("presenca nao existe");
+                throw new NotFoundException("Presença não encontrada");
             }
         }
     }
@@ -113,7 +123,7 @@ export default class PresencaRepository {
                 error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === "P2025"
             ) {
-                throw new NotFoundException("presenca nao existe");
+                throw new NotFoundException("Presença não encontrada");
             }
         }
     }
@@ -153,6 +163,8 @@ export default class PresencaRepository {
                 id: true,
                 dataPresenca: true,
                 horaPresenca: true,
+                latitude: true,
+                longitude: true,
                 pessoa: {
                     select: {
                         id: true,

@@ -20,6 +20,7 @@ export default class EventoRepository {
                 dataFim: evento.dataFim,
                 horaInicio: evento.horaInicio,
                 horaFim: evento.horaFim,
+                localId: evento.localId,
             },
         });
 
@@ -32,7 +33,10 @@ export default class EventoRepository {
                 id: true,
                 nome: true,
                 dataInicio: true,
+                dataFim: true,
                 horaInicio: true,
+                horaFim: true,
+                localId: true,
             },
         });
 
@@ -45,6 +49,11 @@ export default class EventoRepository {
             select: {
                 id: true,
                 nome: true,
+                dataInicio: true,
+                dataFim: true,
+                horaInicio: true,
+                horaFim: true,
+                localId: true,
                 turmas: {
                     select: {
                         id: true,
@@ -76,6 +85,7 @@ export default class EventoRepository {
                     dataFim: evento.dataFim,
                     horaInicio: evento.horaInicio,
                     horaFim: evento.horaFim,
+                    localId: evento.localId,
                 },
             });
 

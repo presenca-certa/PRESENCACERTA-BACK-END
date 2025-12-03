@@ -10,6 +10,7 @@ import {
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { LoginDto } from "./dto/login.dto";
 
 @Controller("user")
 export class UserController {
@@ -18,6 +19,11 @@ export class UserController {
     @Post()
     create(@Body() createUserDTO: CreateUserDTO) {
         return this.userService.create(createUserDTO);
+    }
+
+    @Post("login")
+    login(@Body() loginDto: LoginDto) {
+        return this.userService.login(loginDto);
     }
 
     @Get()

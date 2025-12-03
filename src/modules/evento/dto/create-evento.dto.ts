@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsString } from "class-validator";
+import {
+    IsDate,
+    IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+} from "class-validator";
 import { IEvento } from "src/shared/interfaces/evento.interface";
 
 export default class CreateEventoDto implements IEvento {
@@ -24,6 +30,10 @@ export default class CreateEventoDto implements IEvento {
     // @IsDate({ message: "o campo hora fim deve ser do tipo Date" })
     @IsNotEmpty({ message: "a hora fim do evento é obrigatória" })
     horaFim: Date;
+
+    @IsOptional()
+    @IsInt({ message: "materiaId deve ser um número inteiro" })
+    materiaId?: number;
 
     turmas?: number[];
 
